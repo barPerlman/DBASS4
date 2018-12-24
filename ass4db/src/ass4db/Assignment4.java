@@ -78,8 +78,9 @@ public class Assignment4 {
         Assignment4 ass = new Assignment4();
         //ass.loadNeighborhoodsFromCsv(csvExample);	//test q1
         //ass.updateEmployeeSalaries(100);            //test q2
-        ass.updateAllProjectsBudget(100);   			//test q3
-    	System.out.println("session ended!!!!");
+        //ass.updateAllProjectsBudget(100);   			//test q3
+    	//System.out.println(ass.getEmployeeTotalSalary());//test q4a
+        System.out.println(ass.getTotalProjectBudget());//test q4a
     	
     	
     	/*													//////	only the commented is the original code//////
@@ -233,14 +234,13 @@ public class Assignment4 {
 					//calculate new budget after raise
 					int raisedBudget=(int)(oldBudget*(percentage/100)+oldBudget);	//check if the casting is correct!
 					
-					System.out.println("eid: "+pid+" old salary: "+oldBudget+" new salary: "+raisedBudget);	//for tests only! remove after!
+					//System.out.println("eid: "+pid+" old salary: "+oldBudget+" new salary: "+raisedBudget);	//for tests only! remove after!
 					
 					//update the new salary in the db table of constructore employees in age 50 and more
 					updateBudgetStatement.setInt(1, raisedBudget);
 					updateBudgetStatement.setInt(2, pid);
 					updateBudgetStatement.executeUpdate();
 					con.commit();
-					
 				}
 				
 			}catch(SQLException e){
@@ -275,15 +275,73 @@ public class Assignment4 {
     	
     
 
+/**
+ * 
+ * @return @param total
+ */
+    private double getEmployeeTotalSalary() {	//ask how many days in month to calc the salary per month!!!!!!!
+		
+    	double total=0;	//holds the sum of the constructor employee salaries
+    	int daysPerMonth=30;		//verify!!!!!!!!
+    	
+    	Connection con=getCon();	//open connection
+    	try {
+			Statement st=con.createStatement();		//create statement
+			//get the salaryPerDay data
+	    	String selectQuery="SELECT SalaryPerDay FROM ConstructorEmployee";
+	    	ResultSet results=st.executeQuery(selectQuery);		//get constructor employees data
+	    	while(results.next()){
+	    		int iterSalary=results.getInt(1);
+	    		total+=iterSalary*daysPerMonth;
+	    	}
 
-    private double getEmployeeTotalSalary() {
-		return 0;
+    	}catch(SQLException e){
+    		e.printStackTrace();
+    	}
+    	
+    	if(con!=null){	//close connection with db
+    		try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
+    	return total;
 
     }
 
 
     private int getTotalProjectBudget() {
-		return 0;
+
+    	int total=0;	//holds the sum of the constructor employee salaries
+    	
+    	Connection con=getCon();	//open connection
+    	try {
+			Statement st=con.createStatement();		//create statement
+			//get the budget data
+	    	String selectQuery="SELECT Budget FROM Project";
+	    	ResultSet results=st.executeQuery(selectQuery);		//get budget per project data
+	    	while(results.next()){
+	    		int iterBudget=results.getInt(1);
+	    		total+=iterBudget;
+	    	}
+
+    	}catch(SQLException e){
+    		e.printStackTrace();
+    	}
+    	
+    	if(con!=null){	//close connection with db
+    		try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
+    	return total;
 
     }
     private void dropDB() {
