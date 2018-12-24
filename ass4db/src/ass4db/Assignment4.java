@@ -76,7 +76,8 @@ public class Assignment4 {
     	
     	String csvExample="exampleCsv.csv";
         Assignment4 ass = new Assignment4();
-        ass.loadNeighborhoodsFromCsv(csvExample);
+        //ass.loadNeighborhoodsFromCsv(csvExample);	//test q1
+        ass.updateEmployeeSalaries(100);            //test q2
     	System.out.println("session ended!!!!");
     	
     	
@@ -129,18 +130,7 @@ public class Assignment4 {
 	    	}catch(FileNotFoundException e){
 	    		e.printStackTrace();
 	    	}
-			
-			
-		/*  for tests remove in the end
-			 ResultSet results2=st.executeQuery("SELECT NID,Name FROM Neighborhood");
-
-			//check if i can select from db
-			while(results2.next()){
-				int nid=results2.getInt(1);
-				String name=results2.getString(2);
-				System.out.println("NID: "+nid+", Name: "+name);
-			}
-    	*/
+	
     	} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -157,9 +147,67 @@ public class Assignment4 {
     	}
     	
     }
+/**
+ * update constructor employees salary
+ * @param percentage - update salary by this param
+ */
+    private void updateEmployeeSalaries(double percentage) {		//ask if to update constructor as did or Employee
 
-    private void updateEmployeeSalaries(double percentage) {
-
+    	Connection con=getCon();	//open connection
+    	try {
+			Statement st=con.createStatement();		//create statement
+			PreparedStatement updateSalaryStatement=null;
+			//get the constructor employees data of those who are 50 years old or older
+	    	String selectQuery="SELECT ce.EID,SalaryPerDay FROM ConstructorEmployee ce,Employee e WHERE ce.EID=e.EID AND DATEDIFF(year,e.BirthDate,GETDATE())>49;";
+			String updateSalaryString="UPDATE ConstructorEmployee SET SalaryPerDay = ? WHERE EID = ?";
+	    	ResultSet results=st.executeQuery(selectQuery);		//get constructor employees data
+			//prepare update statement
+	    	try{
+				con.setAutoCommit(false);
+				updateSalaryStatement=con.prepareStatement(updateSalaryString);
+				
+				while(results.next()){	//get the salary of each employee and update by raise percentage
+					int eid=results.getInt(1);
+					int oldSalary=results.getInt(2);
+					//calculate new salary after raise
+					int raisedSalary=(int)(oldSalary*(percentage/100)+oldSalary);	//check if the casting is correct!
+					
+					System.out.println("eid: "+eid+" old salary: "+oldSalary+" new salary: "+raisedSalary);	//for tests only! remove after!
+					
+					//update the new salary in the db table of constructore employees in age 50 and more
+					updateSalaryStatement.setInt(1, raisedSalary);
+					updateSalaryStatement.setInt(2, eid);
+					updateSalaryStatement.executeUpdate();
+					con.commit();
+					
+				}
+				
+			}catch(SQLException e){
+				e.printStackTrace();
+				if(con!=null){
+					try{
+						System.err.print("Transaction is being rolled back");
+						con.rollback();
+					}catch(SQLException error){
+						error.printStackTrace();
+					}
+				}
+			}
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+    	if(con!=null){	//close connection with db
+    		try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
     }
 
 
@@ -212,7 +260,7 @@ public class Assignment4 {
     }
     
     /**
-     * the following returns a connection with sql db
+     * the following returns a connection with sql db of assignment	------verify right name of db!!!!!!!!!!!!!
      */
     private static Connection getCon() {
 		Connection connection = null;
