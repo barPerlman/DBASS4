@@ -77,7 +77,8 @@ public class Assignment4 {
     	String csvExample="exampleCsv.csv";
         Assignment4 ass = new Assignment4();
         //ass.loadNeighborhoodsFromCsv(csvExample);	//test q1
-        ass.updateEmployeeSalaries(100);            //test q2
+        //ass.updateEmployeeSalaries(100);            //test q2
+        ass.updateAllProjectsBudget(100);   			//test q3
     	System.out.println("session ended!!!!");
     	
     	
@@ -172,7 +173,7 @@ public class Assignment4 {
 					//calculate new salary after raise
 					int raisedSalary=(int)(oldSalary*(percentage/100)+oldSalary);	//check if the casting is correct!
 					
-					System.out.println("eid: "+eid+" old salary: "+oldSalary+" new salary: "+raisedSalary);	//for tests only! remove after!
+					//System.out.println("eid: "+eid+" old salary: "+oldSalary+" new salary: "+raisedSalary);	//for tests only! remove after!
 					
 					//update the new salary in the db table of constructore employees in age 50 and more
 					updateSalaryStatement.setInt(1, raisedSalary);
@@ -213,7 +214,66 @@ public class Assignment4 {
 
     public void updateAllProjectsBudget(double percentage) {
 
+    	Connection con=getCon();	//open connection
+    	try {
+			Statement st=con.createStatement();		//create statement
+			PreparedStatement updateBudgetStatement=null;
+			//get the projects data
+	    	String selectQuery="SELECT PID,Budget FROM Project";
+			String updateBudgetString="UPDATE Project SET Budget = ? WHERE PID = ?";
+	    	ResultSet results=st.executeQuery(selectQuery);		//get projects data
+			//prepare update statement
+	    	try{
+				con.setAutoCommit(false);
+				updateBudgetStatement=con.prepareStatement(updateBudgetString);
+				
+				while(results.next()){	//get the budget of each project and update by raise percentage
+					int pid=results.getInt(1);
+					int oldBudget=results.getInt(2);
+					//calculate new budget after raise
+					int raisedBudget=(int)(oldBudget*(percentage/100)+oldBudget);	//check if the casting is correct!
+					
+					System.out.println("eid: "+pid+" old salary: "+oldBudget+" new salary: "+raisedBudget);	//for tests only! remove after!
+					
+					//update the new salary in the db table of constructore employees in age 50 and more
+					updateBudgetStatement.setInt(1, raisedBudget);
+					updateBudgetStatement.setInt(2, pid);
+					updateBudgetStatement.executeUpdate();
+					con.commit();
+					
+				}
+				
+			}catch(SQLException e){
+				e.printStackTrace();
+				if(con!=null){
+					try{
+						System.err.print("Transaction is being rolled back");
+						con.rollback();
+					}catch(SQLException error){
+						error.printStackTrace();
+					}
+				}
+			}
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+    	if(con!=null){	//close connection with db
+    		try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
     }
+
+    	
+    	
+    
 
 
     private double getEmployeeTotalSalary() {
