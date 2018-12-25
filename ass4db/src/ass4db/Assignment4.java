@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Calendar;
 import java.util.Scanner;
+
+import javax.swing.Painter;
+
 import java.text.SimpleDateFormat;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -80,8 +83,9 @@ public class Assignment4 {
         //ass.updateEmployeeSalaries(100);            //test q2
         //ass.updateAllProjectsBudget(100);   			//test q3
     	//System.out.println(ass.getEmployeeTotalSalary());//test q4a
-        System.out.println(ass.getTotalProjectBudget());//test q4a
-    	
+        //System.out.println(ass.getTotalProjectBudget());//test q4b
+        //System.out.println(ass.calculateIncomeFromParking(1990));//test q5
+        //ArrayList<Pair<Integer,Integer>>mostProfitPAreas=ass.getMostProfitableParkingAreas();	//test q6
     	
     	/*													//////	only the commented is the original code//////
         File file = new File(".");
@@ -315,7 +319,7 @@ public class Assignment4 {
 
     private int getTotalProjectBudget() {
 
-    	int total=0;	//holds the sum of the constructor employee salaries
+    	int total=0;	//holds the sum of the budgets
     	
     	Connection con=getCon();	//open connection
     	try {
@@ -352,13 +356,80 @@ public class Assignment4 {
 
     }
     private int calculateIncomeFromParking(int year) {
-		return 0;
 
+
+int totalIncome=0;	//holds the sum of the costs payed in 'year'
+    	
+    	Connection con=getCon();	//open connection
+    	try {
+			Statement st=con.createStatement();		//create statement
+			//get the cost data
+	    	String selectQuery="SELECT Cost FROM CarParking WHERE YEAR(EndTime)='"+year+"'";
+	    	ResultSet results=st.executeQuery(selectQuery);		//get budget per project data
+	    	while(results.next()){
+	    		int iterIncome=results.getInt(1);
+	    		totalIncome+=iterIncome;
+	    		//System.out.println(iterIncome);	//for tests only!remove!!!
+	    	}
+
+    	}catch(SQLException e){
+    		e.printStackTrace();
+    	}
+    	
+    	if(con!=null){	//close connection with db
+    		try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
+    	return totalIncome;
+    	
     }
 
-    private ArrayList<Pair<Integer, Integer>> getMostProfitableParkingAreas() {
-		return null;
+    /**
+     * 
+     * @return array list of pairs <parkingAreaID,profitCalculated> of top 5 profit parking areas
+     */
+    @SuppressWarnings("restriction")			//is the pair is for <parkingAreaID,profitCalculated>???!!!!
+	private ArrayList<Pair<Integer, Integer>> getMostProfitableParkingAreas() {
+    	ArrayList<Pair<Integer, Integer>> mostProfitPAreas=null;		//holds the top 5 profit parking areas
 
+    	Connection con=getCon();	//open connection
+    	try {
+			Statement st=con.createStatement();		//create statement
+			//get the cost data
+	    	String selectQuery="SELECT TOP 5 ParkingAreaID, SUM(Cost) AS Profit FROM CarParking group by ParkingAreaID ORDER BY Profit DESC";
+	    	ResultSet results=st.executeQuery(selectQuery);		//get budget per project data
+	    	mostProfitPAreas=new ArrayList<>(5);
+	    	while(results.next()){
+	    		int parkingAreaID=results.getInt(1);
+	    		int profit=results.getInt(2);
+	    		mostProfitPAreas.add(new Pair(new Integer(parkingAreaID),new Integer(profit)));
+	    		//System.out.println("the profit for AID: "+parkingAreaID+" is: "+profit);	//for tests only!remove!!!
+	    	}
+	  /* for(Pair<Integer,Integer> p:mostProfitPAreas){ 			//////for tests only!!!!!!!!!!!
+	    	System.out.println(p.getKey()+", "+p.getValue());
+	    }*/
+    	}catch(SQLException e){
+    		e.printStackTrace();
+    	}
+    	
+    	if(con!=null){	//close connection with db
+    		try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
+    	
+    	
+    	
+    	return mostProfitPAreas;
     }
 
     private ArrayList<Pair<Integer, Integer>> getNumberOfParkingByArea() {
