@@ -87,7 +87,7 @@ public class Assignment4 {
         //System.out.println(ass.calculateIncomeFromParking(1990));//test q5
         //ArrayList<Pair<Integer,Integer>>mostProfitPAreas=ass.getMostProfitableParkingAreas();	//test q6a
         //ArrayList<Pair<Integer,Integer>>amountInAreas=ass.getNumberOfParkingByArea();	//test q6b
-        
+        //ArrayList<Pair<Integer,Integer>>carsInAreas=ass.getNumberOfDistinctCarsByArea();	//test q6c
     	/*													//////	only the commented is the original code//////
         File file = new File(".");
         String csvFile = args[0];
@@ -439,7 +439,7 @@ int totalIncome=0;	//holds the sum of the costs payed in 'year'
      */
     private ArrayList<Pair<Integer, Integer>> getNumberOfParkingByArea() {
 		
-    	ArrayList<Pair<Integer, Integer>> amountParkingsAtArea=null;		//holds the top 5 profit parking areas
+    	ArrayList<Pair<Integer, Integer>> amountParkingsAtArea=null;		//holds parkings at parking areas
 
     	Connection con=getCon();	//open connection
     	try {
@@ -473,8 +473,35 @@ int totalIncome=0;	//holds the sum of the costs payed in 'year'
 
 
     private ArrayList<Pair<Integer, Integer>> getNumberOfDistinctCarsByArea() {
-		return null;
+		
+     	ArrayList<Pair<Integer, Integer>> carsAtArea=null;		//holds the top 5 profit parking areas
 
+    	Connection con=getCon();	//open connection
+    	try {
+			Statement st=con.createStatement();		//create statement
+			//get the cost data
+	    	String selectQuery="SELECT ParkingAreaID, COUNT(DISTINCT CID) AS carsAmount FROM CarParking GROUP BY ParkingAreaID ORDER BY ParkingAreaID";
+	    	ResultSet results=st.executeQuery(selectQuery);		//get amount of cars in areas
+	    	carsAtArea=new ArrayList<>();
+	    	while(results.next()){
+	    		int parkingAreaID=results.getInt(1);
+	    		int amount=results.getInt(2);		//get amount of parkings in iterated area
+	    		carsAtArea.add(new Pair(new Integer(parkingAreaID),new Integer(amount)));
+	    	}
+	
+    	}catch(SQLException e){
+    		e.printStackTrace();
+    	}
+    	
+    	if(con!=null){	//close connection with db
+    		try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	return carsAtArea;
     }
 
 
