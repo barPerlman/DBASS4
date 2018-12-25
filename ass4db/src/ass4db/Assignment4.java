@@ -85,8 +85,9 @@ public class Assignment4 {
     	//System.out.println(ass.getEmployeeTotalSalary());//test q4a
         //System.out.println(ass.getTotalProjectBudget());//test q4b
         //System.out.println(ass.calculateIncomeFromParking(1990));//test q5
-        //ArrayList<Pair<Integer,Integer>>mostProfitPAreas=ass.getMostProfitableParkingAreas();	//test q6
-    	
+        //ArrayList<Pair<Integer,Integer>>mostProfitPAreas=ass.getMostProfitableParkingAreas();	//test q6a
+        //ArrayList<Pair<Integer,Integer>>amountInAreas=ass.getNumberOfParkingByArea();	//test q6b
+        
     	/*													//////	only the commented is the original code//////
         File file = new File(".");
         String csvFile = args[0];
@@ -402,7 +403,7 @@ int totalIncome=0;	//holds the sum of the costs payed in 'year'
 			Statement st=con.createStatement();		//create statement
 			//get the cost data
 	    	String selectQuery="SELECT TOP 5 ParkingAreaID, SUM(Cost) AS Profit FROM CarParking group by ParkingAreaID ORDER BY Profit DESC";
-	    	ResultSet results=st.executeQuery(selectQuery);		//get budget per project data
+	    	ResultSet results=st.executeQuery(selectQuery);		//get profit per area data
 	    	mostProfitPAreas=new ArrayList<>(5);
 	    	while(results.next()){
 	    		int parkingAreaID=results.getInt(1);
@@ -432,8 +433,41 @@ int totalIncome=0;	//holds the sum of the costs payed in 'year'
     	return mostProfitPAreas;
     }
 
+    /**
+     * 
+     * @return array list of pairs <parkingAreaID,amount of parkings in this area> 
+     */
     private ArrayList<Pair<Integer, Integer>> getNumberOfParkingByArea() {
-		return null;
+		
+    	ArrayList<Pair<Integer, Integer>> amountParkingsAtArea=null;		//holds the top 5 profit parking areas
+
+    	Connection con=getCon();	//open connection
+    	try {
+			Statement st=con.createStatement();		//create statement
+			//get the cost data
+	    	String selectQuery="SELECT ParkingAreaID, COUNT(*) AS parkingAmount FROM CarParking group by ParkingAreaID ORDER BY ParkingAreaID";
+	    	ResultSet results=st.executeQuery(selectQuery);		//get amount of parkings in areas
+	    	amountParkingsAtArea=new ArrayList<>();
+	    	while(results.next()){
+	    		int parkingAreaID=results.getInt(1);
+	    		int amount=results.getInt(2);		//get amount of parkings in iterated area
+	    		amountParkingsAtArea.add(new Pair(new Integer(parkingAreaID),new Integer(amount)));
+	    	}
+	
+    	}catch(SQLException e){
+    		e.printStackTrace();
+    	}
+    	
+    	if(con!=null){	//close connection with db
+    		try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
+    	return amountParkingsAtArea;
 
     }
 
