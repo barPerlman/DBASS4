@@ -7,7 +7,6 @@ import java.sql.*;
 import java.util.Calendar;
 import java.util.Scanner;
 
-import javax.swing.Painter;
 
 import java.text.SimpleDateFormat;
 import java.io.File;
@@ -74,7 +73,7 @@ public class Assignment4 {
 
 
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 
     	
     	String csvExample="exampleCsv.csv";
@@ -88,6 +87,9 @@ public class Assignment4 {
         //ArrayList<Pair<Integer,Integer>>mostProfitPAreas=ass.getMostProfitableParkingAreas();	//test q6a
         //ArrayList<Pair<Integer,Integer>>amountInAreas=ass.getNumberOfParkingByArea();	//test q6b
         //ArrayList<Pair<Integer,Integer>>carsInAreas=ass.getNumberOfDistinctCarsByArea();	//test q6c
+        //ass.AddEmployee(100, "Banana", "Moti", new SimpleDateFormat("12-12-2003"), "rager", 103, 15, "Beer sheva");	//test q7
+        //ass.dropDB();//test q8	//dangerous!!!! notice which is the table to drop
+        
     	/*													//////	only the commented is the original code//////
         File file = new File(".");
         String csvFile = args[0];
@@ -350,7 +352,24 @@ public class Assignment4 {
 
     }
     private void dropDB() {
-
+    	Connection con=getCon();
+    	String DBNameToDrop="temp";
+    	String sqlString="DROP DATABASE "+DBNameToDrop;
+    	try {
+			Statement st=con.createStatement();
+			st.executeUpdate(sqlString);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	if(con!=null){
+    		try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     }
 
     private void initDB(String csvPath) {
@@ -504,9 +523,45 @@ int totalIncome=0;	//holds the sum of the costs payed in 'year'
     	return carsAtArea;
     }
 
-
+/**
+ * add Employee with following details to the Employee table
+ * @param EID
+ * @param LastName
+ * @param FirstName
+ * @param BirthDate
+ * @param StreetName
+ * @param Number
+ * @param door
+ * @param City
+ */
     private void AddEmployee(int EID, String LastName, String FirstName, Date BirthDate, String StreetName, int Number, int door, String City) {
 
+    	Connection con=getCon();	//get the connection with DB
+    	try {
+			Statement st =con.createStatement();
+		
+	    			//insert a row to the Employee table
+	    			try {
+	    				//results get the feedback from query
+						int results=st.executeUpdate("INSERT INTO Employee (EID,LastName,FirstName,BirthDate,StreetName,Number,door,City) VALUES('"+EID+"','"+LastName+"','"+FirstName+"','"+BirthDate+"','"+StreetName+"','"+Number+"','"+door+"','"+City+"')");
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+    	}catch(SQLException ex){
+    		ex.printStackTrace();
+    	}
+	
+	    	//close connection
+    	if(con!=null){
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
     }
     
     /**
