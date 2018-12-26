@@ -93,8 +93,8 @@ public class Assignment4 {
         //ArrayList<Pair<Integer,Integer>>amountInAreas=ass.getNumberOfParkingByArea();	//test q6b
         //ArrayList<Pair<Integer,Integer>>carsInAreas=ass.getNumberOfDistinctCarsByArea();	//test q6c
         //ass.AddEmployee(211, "Banana", "Moti", new Date(2003,12,12), "rager", 103, 15, "Beer sheva");	//test q7
-        //ass.dropDB();//test q8	//dangerous!!!! notice which is the table to drop
-        ass.initDB("exDDL.sql");
+        ass.dropDB();//test q8	//dangerous!!!! notice which is the table to drop
+        //ass.initDB("exDDL.sql");
     	/*													//////	only the commented is the original code//////
         File file = new File(".");
         String csvFile = args[0];
@@ -356,8 +356,9 @@ public class Assignment4 {
 
     }
     private void dropDB() {
-    	Connection con=getCon();
+    	Connection con=getConWithMaster();
     	String DBNameToDrop="temp";						//change to DB2019_Ass2 before submitting
+    	//String DBNameToDrop="DB2019_Ass2";
     	String sqlString="DROP DATABASE "+DBNameToDrop;
     	try {
 			Statement st=con.createStatement();
