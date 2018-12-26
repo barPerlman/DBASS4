@@ -21,7 +21,11 @@ import java.util.ArrayList;
 public class Assignment4 {
 
 
+	//for the regular workflow of the program besides the init method
 	private static String JDBC_CONNECTION_URL="jdbc:sqlserver://localhost;username=LAPTOP-Q6DKH3TT/SQLEXPRESS;databaseName=DB2019_Ass2;integratedSecurity=true;";
+	//for the init db method
+	private static String JDBC_CONNECTION_URL_INIT="jdbc:sqlserver://localhost;username=LAPTOP-Q6DKH3TT/SQLEXPRESS;integratedSecurity=true;";
+
 	
     private Assignment4() {
     }
@@ -88,9 +92,9 @@ public class Assignment4 {
         //ArrayList<Pair<Integer,Integer>>mostProfitPAreas=ass.getMostProfitableParkingAreas();	//test q6a
         //ArrayList<Pair<Integer,Integer>>amountInAreas=ass.getNumberOfParkingByArea();	//test q6b
         //ArrayList<Pair<Integer,Integer>>carsInAreas=ass.getNumberOfDistinctCarsByArea();	//test q6c
-        ass.AddEmployee(211, "Banana", "Moti", new Date(2003,12,12), "rager", 103, 15, "Beer sheva");	//test q7
+        //ass.AddEmployee(211, "Banana", "Moti", new Date(2003,12,12), "rager", 103, 15, "Beer sheva");	//test q7
         //ass.dropDB();//test q8	//dangerous!!!! notice which is the table to drop
-        
+        ass.initDB("exDDL.sql");
     	/*													//////	only the commented is the original code//////
         File file = new File(".");
         String csvFile = args[0];
@@ -373,7 +377,56 @@ public class Assignment4 {
     }
 
     private void initDB(String csvPath) {
+    	
 
+    	String readQuery="";
+    	Connection con=getConWithMaster();	//get the connection with DB
+    	try {
+			Statement st =con.createStatement();
+			long results;	//get the feedback from query
+		
+	    	File file=new File(csvPath);
+	    	try{
+	    		Scanner inputStream=new Scanner(file);
+	    		while(inputStream.hasNextLine()){			//read csv file data
+	    			//System.out.println(inputStream.nextLine());
+	    			String nextLine=inputStream.nextLine();
+	    			if(!nextLine.equals("GO")&&(!strIsCreateDatabase(nextLine))){
+	    			readQuery+=nextLine;
+	    			readQuery+="\n";
+	    			}
+	    			else{	//create DB
+	    				if(!nextLine.equals("GO")){
+	    				results=st.executeUpdate(nextLine);
+	    				}
+	    			}
+	    		}
+	    		//System.out.println(readQuery);
+    			results=st.executeUpdate(readQuery);
+
+	    		//close stream
+	    		inputStream.close();
+	    			
+	    	}catch(FileNotFoundException e){
+	    		e.printStackTrace();
+	    	}
+	
+    	} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    
+	    	//close connection
+    	if(con!=null){
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
+    
     }
     private int calculateIncomeFromParking(int year) {
 
@@ -581,8 +634,41 @@ int totalIncome=0;	//holds the sum of the costs payed in 'year'
 
 		return connection;
 	}
+
+    
+ 
+/**
+ * the following returns a connection with sql master db	
+ */
+private static Connection getConWithMaster() {
+	Connection connection = null;
+	try {
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		connection = DriverManager.getConnection(JDBC_CONNECTION_URL_INIT);
+
+	} catch (ClassNotFoundException e) {
+		e.printStackTrace();
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+
+	return connection;
 }
-    
-    
+/**
+ * check if the string represent a create DB command
+ * @param str
+ * @return true-create db command=str,otherwise false
+ */
+public static boolean strIsCreateDatabase(String str){
+	boolean ans=false;
+	
+	if(str.startsWith("Create d")||str.startsWith("CREATE d")||str.startsWith("Create D")||str.startsWith("CREATE D")||
+			str.startsWith("create d")||str.startsWith("create D")){
+		ans=true;
+	}
+	
+	return ans;
+}
+}
     
 
