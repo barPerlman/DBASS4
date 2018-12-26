@@ -450,7 +450,7 @@ int totalIncome=0;	//holds the sum of the costs payed in 'year'
      * 
      * @return array list of pairs <parkingAreaID,profitCalculated> of top 5 profit parking areas
      */
-    @SuppressWarnings("restriction")			//is the pair is for <parkingAreaID,profitCalculated>???!!!!
+    			
 	private ArrayList<Pair<Integer, Integer>> getMostProfitableParkingAreas() {
     	ArrayList<Pair<Integer, Integer>> mostProfitPAreas=null;		//holds the top 5 profit parking areas
 
