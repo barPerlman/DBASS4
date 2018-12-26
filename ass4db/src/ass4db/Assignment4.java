@@ -77,26 +77,9 @@ public class Assignment4 {
 
 
 
-	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 
-    	
-    	String csvExample="exampleCsv.csv";
-        Assignment4 ass = new Assignment4();
-        //ass.loadNeighborhoodsFromCsv(csvExample);	//test q1
-        //ass.updateEmployeeSalaries(100);            //test q2
-        //ass.updateAllProjectsBudget(100);   			//test q3
-    	//System.out.println(ass.getEmployeeTotalSalary());//test q4a
-        //System.out.println(ass.getTotalProjectBudget());//test q4b
-        //System.out.println(ass.calculateIncomeFromParking(1990));//test q5
-        //ArrayList<Pair<Integer,Integer>>mostProfitPAreas=ass.getMostProfitableParkingAreas();	//test q6a
-        //ArrayList<Pair<Integer,Integer>>amountInAreas=ass.getNumberOfParkingByArea();	//test q6b
-        //ArrayList<Pair<Integer,Integer>>carsInAreas=ass.getNumberOfDistinctCarsByArea();	//test q6c
-        //ass.AddEmployee(211, "Banana", "Moti", new Date(2003,12,12), "rager", 103, 15, "Beer sheva");	//test q7
-        //ass.dropDB();//test q8	//dangerous!!!! notice which is the table to drop
-        ass.initDB("exDDL.sql");
-    	/*													//////	only the commented is the original code//////
-        File file = new File(".");
+		File file = new File(".");
         String csvFile = args[0];
         String line = "";
         String cvsSplitBy = ",";
@@ -115,7 +98,7 @@ public class Assignment4 {
         } catch (IOException e) {
             e.printStackTrace();
 
-        } */
+        } 
     }
 
 
@@ -356,8 +339,9 @@ public class Assignment4 {
 
     }
     private void dropDB() {
-    	Connection con=getCon();
+    	Connection con=getConWithMaster();
     	String DBNameToDrop="temp";						//change to DB2019_Ass2 before submitting
+    	//String DBNameToDrop="DB2019_Ass2";
     	String sqlString="DROP DATABASE "+DBNameToDrop;
     	try {
 			Statement st=con.createStatement();
