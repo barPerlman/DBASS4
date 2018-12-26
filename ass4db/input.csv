@@ -1,4 +1,4 @@
-loadNeighborhoodsFromCsv,data/neighborhoods.csv,,,,,,,
+AddEmployee,123,p,b,1967-11-11,haruv,1,1,nahariya
 updateEmployeeSalaries,3,,,,,,,
 updateEmployeeSalaries,10,,,,,,,
 getEmployeeTotalSalary,,,,,,,,

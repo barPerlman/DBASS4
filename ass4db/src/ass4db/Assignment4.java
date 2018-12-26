@@ -602,7 +602,7 @@ int totalIncome=0;	//holds the sum of the costs payed in 'year'
     }
     
     /**
-     * the following returns a connection with sql db of assignment	------verify right name of db!!!!!!!!!!!!!
+     * the following returns a connection with sql db of assignment
      */
     private static Connection getCon() {
 		Connection connection = null;
