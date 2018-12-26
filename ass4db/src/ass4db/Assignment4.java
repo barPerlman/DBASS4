@@ -73,6 +73,7 @@ public class Assignment4 {
 
 
 
+	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 
     	
@@ -87,7 +88,7 @@ public class Assignment4 {
         //ArrayList<Pair<Integer,Integer>>mostProfitPAreas=ass.getMostProfitableParkingAreas();	//test q6a
         //ArrayList<Pair<Integer,Integer>>amountInAreas=ass.getNumberOfParkingByArea();	//test q6b
         //ArrayList<Pair<Integer,Integer>>carsInAreas=ass.getNumberOfDistinctCarsByArea();	//test q6c
-        //ass.AddEmployee(100, "Banana", "Moti", new SimpleDateFormat("12-12-2003"), "rager", 103, 15, "Beer sheva");	//test q7
+        ass.AddEmployee(211, "Banana", "Moti", new Date(2003,12,12), "rager", 103, 15, "Beer sheva");	//test q7
         //ass.dropDB();//test q8	//dangerous!!!! notice which is the table to drop
         
     	/*													//////	only the commented is the original code//////
@@ -160,7 +161,7 @@ public class Assignment4 {
  * update constructor employees salary
  * @param percentage - update salary by this param
  */
-    private void updateEmployeeSalaries(double percentage) {		//ask if to update constructor as did or Employee
+    private void updateEmployeeSalaries(double percentage) {		
 
     	Connection con=getCon();	//open connection
     	try {
@@ -286,10 +287,9 @@ public class Assignment4 {
  * 
  * @return @param total
  */
-    private double getEmployeeTotalSalary() {	//ask how many days in month to calc the salary per month!!!!!!!
+    private double getEmployeeTotalSalary() {	
 		
     	double total=0;	//holds the sum of the constructor employee salaries
-    	int daysPerMonth=30;		//verify!!!!!!!!
     	
     	Connection con=getCon();	//open connection
     	try {
@@ -299,7 +299,7 @@ public class Assignment4 {
 	    	ResultSet results=st.executeQuery(selectQuery);		//get constructor employees data
 	    	while(results.next()){
 	    		int iterSalary=results.getInt(1);
-	    		total+=iterSalary*daysPerMonth;
+	    		total+=iterSalary;
 	    	}
 
     	}catch(SQLException e){
@@ -353,7 +353,7 @@ public class Assignment4 {
     }
     private void dropDB() {
     	Connection con=getCon();
-    	String DBNameToDrop="temp";
+    	String DBNameToDrop="temp";						//change to DB2019_Ass2 before submitting
     	String sqlString="DROP DATABASE "+DBNameToDrop;
     	try {
 			Statement st=con.createStatement();
