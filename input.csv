@@ -1,4 +1,4 @@
-loadNeighborhoodsFromCsv,data/neighborhoods.csv
+loadNeighborhoodsFromCsv,C:/Users/barpe/Desktop/data/neighborhoods.csv
 initDB,C:/Users/barpe/Downloads/New folder/DB2019_Project_Ass4_DDL.sql
 updateEmployeeSalaries,100
 getEmployeeTotalSalary
