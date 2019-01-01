@@ -1,6 +1,11 @@
-calculateIncomeFromParking,2000
-getMostProfitableParkingAreas,
-updateEmployeeSalaries,3,,,,,,,
-updateEmployeeSalaries,10,,,,,,,
-getEmployeeTotalSalary,,,,,,,,
+loadNeighborhoodsFromCsv,data/neighborhoods.csv
 initDB,C:/Users/barpe/Downloads/New folder/DB2019_Project_Ass4_DDL.sql
+updateEmployeeSalaries,100
+getEmployeeTotalSalary
+updateAllProjectsBudget,100
+getTotalProjectBudget
+calculateIncomeFromParking,2000
+getMostProfitableParkingAreas
+getNumberOfParkingByArea
+getNumberOfDistinctCarsByArea
+AddEmployee,400,bardugoiiirrrr,bariirrrr,1929-12-10,narkisairrr,7,7,jerusalemr
