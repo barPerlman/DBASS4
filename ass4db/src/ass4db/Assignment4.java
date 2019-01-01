@@ -96,7 +96,7 @@ public class Assignment4 {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 
 		} 
 	}
@@ -130,20 +130,18 @@ public class Assignment4 {
 				inputStream.close();
 
 			}catch(FileNotFoundException e){
-				e.printStackTrace();
+				
 				if(con!=null){
 					try{
 						System.err.print("Transaction is being rolled back");
 						con.rollback();
 					}catch(SQLException error){
-						error.printStackTrace();
 					}
 				}
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 
 		//close connection
@@ -151,8 +149,7 @@ public class Assignment4 {
 			try {
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
 
@@ -191,28 +188,24 @@ public class Assignment4 {
 				}
 
 			}catch(SQLException e){
-				e.printStackTrace();
+				
 				if(con!=null){
 					try{
-						System.err.print("Transaction is being rolled back");
 						con.rollback();
 					}catch(SQLException error){
-						error.printStackTrace();
 					}
 				}
 			}
 
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			
 		}
 
 		if(con!=null){	//close connection with db
 			try {
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
 
@@ -248,28 +241,26 @@ public class Assignment4 {
 				}
 
 			}catch(SQLException e){
-				e.printStackTrace();
+				
 				if(con!=null){
 					try{
 						System.err.print("Transaction is being rolled back");
 						con.rollback();
 					}catch(SQLException error){
-						error.printStackTrace();
+						
 					}
 				}
 			}
 
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			
 		}
 
 		if(con!=null){	//close connection with db
 			try {
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
 
@@ -299,15 +290,14 @@ public class Assignment4 {
 			}
 
 		}catch(SQLException e){
-			e.printStackTrace();
+			
 		}
 
 		if(con!=null){	//close connection with db
 			try {
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
 
@@ -335,15 +325,14 @@ public class Assignment4 {
 			}
 
 		}catch(SQLException e){
-			e.printStackTrace();
+			
 		}
 
 		if(con!=null){	//close connection with db
 			try {
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
 
@@ -361,15 +350,13 @@ public class Assignment4 {
 			Statement st=con.createStatement();
 			st.executeUpdate(sqlString);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 		if(con!=null){
 			try {
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
 	}
@@ -405,12 +392,11 @@ public class Assignment4 {
 				inputStream.close();
 
 			}catch(FileNotFoundException e){
-				e.printStackTrace();
+				
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 
 		//close connection
@@ -418,8 +404,7 @@ public class Assignment4 {
 			try {
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
 
@@ -449,15 +434,14 @@ public class Assignment4 {
 				totalIncome+=iterIncome;
 			}
 		}catch(SQLException e){
-			e.printStackTrace();
+			
 		}
 
 		if(con!=null){	//close connection with db
 			try {
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
 		return totalIncome;
@@ -485,15 +469,14 @@ public class Assignment4 {
 			}
 
 		}catch(SQLException e){
-			e.printStackTrace();
+			
 		}
 
 		if(con!=null){	//close connection with db
 			try {
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
 
@@ -523,15 +506,14 @@ public class Assignment4 {
 			}
 
 		}catch(SQLException e){
-			e.printStackTrace();
+			
 		}
 
 		if(con!=null){	//close connection with db
 			try {
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
 
@@ -561,15 +543,14 @@ public class Assignment4 {
 			}
 
 		}catch(SQLException e){
-			e.printStackTrace();
+			
 		}
 
 		if(con!=null){	//close connection with db
 			try {
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			
 			}
 		}
 		return carsAtArea;
@@ -607,8 +588,7 @@ public class Assignment4 {
 			con.commit();
 				
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		
 
@@ -617,8 +597,7 @@ public class Assignment4 {
 			try {
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
 			}
 		}
 
@@ -634,9 +613,9 @@ public class Assignment4 {
 			connection = DriverManager.getConnection(JDBC_CONNECTION_URL);
 
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			
 		}
 
 		return connection;
@@ -654,9 +633,9 @@ public class Assignment4 {
 			connection = DriverManager.getConnection(JDBC_CONNECTION_URL_INIT);
 
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			
 		}
 
 		return connection;
