@@ -106,11 +106,12 @@ public class Assignment4 {
 	private void loadNeighborhoodsFromCsv(String csvPath) {
 		Connection con=getCon();	//get the connection with DB
 		try {
-			Statement st =con.createStatement();
-			int results;	//get the feedback from query
-
+			PreparedStatement updateNeigborhoodsStatement=null;
+			String updateNeigborhoods="INSERT INTO Neighborhood (NID,Name) VALUES(?,?)";//by nid,name insert 
 			File file=new File(csvPath);
 			try{
+				con.setAutoCommit(false);
+				updateNeigborhoodsStatement=con.prepareStatement(updateNeigborhoods);
 				Scanner inputStream=new Scanner(file);
 				while(inputStream.hasNext()){			//read csv file data
 					String data=inputStream.next();
@@ -119,13 +120,25 @@ public class Assignment4 {
 					int nid=Integer.parseInt(fields[0]);	//get the NID from file
 					String name=fields[1];						//get the Name from file
 					//insert a row to the neighborhood table
-					results=st.executeUpdate("INSERT INTO Neighborhood (NID,Name) VALUES('"+nid+"','"+name+"')");
+					//update the new salary in the db table of constructor employees in age 50 and more
+					updateNeigborhoodsStatement.setInt(1, nid);
+					updateNeigborhoodsStatement.setString(2, name);
+					updateNeigborhoodsStatement.executeUpdate();
+					con.commit();
 				}
 				//close stream
 				inputStream.close();
 
 			}catch(FileNotFoundException e){
 				e.printStackTrace();
+				if(con!=null){
+					try{
+						System.err.print("Transaction is being rolled back");
+						con.rollback();
+					}catch(SQLException error){
+						error.printStackTrace();
+					}
+				}
 			}
 
 		} catch (SQLException e) {
@@ -427,15 +440,17 @@ public class Assignment4 {
 
 		Connection con=getCon();	//open connection
 		try {
-			Statement st=con.createStatement();		//create statement
 			//get the cost data
-			String selectQuery="SELECT Cost FROM CarParking WHERE YEAR(EndTime)='"+year+"'";
-			ResultSet results=st.executeQuery(selectQuery);		//get budget per project data
+			//create sql query of prepared statement
+			String selectQuery="SELECT Cost FROM CarParking WHERE YEAR(EndTime) = ? ";
+			PreparedStatement pst=con.prepareStatement(selectQuery);
+			pst.setInt(1, year);	//update query by year
+			ResultSet results=pst.executeQuery();
+			//cakc income by received data
 			while(results.next()){
 				int iterIncome=results.getInt(1);
 				totalIncome+=iterIncome;
 			}
-
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
@@ -448,9 +463,7 @@ public class Assignment4 {
 				e.printStackTrace();
 			}
 		}
-
 		return totalIncome;
-
 	}
 
 	/**
