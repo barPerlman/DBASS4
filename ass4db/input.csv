@@ -3,3 +3,4 @@ getMostProfitableParkingAreas,
 updateEmployeeSalaries,3,,,,,,,
 updateEmployeeSalaries,10,,,,,,,
 getEmployeeTotalSalary,,,,,,,,
+initDB,C:/Users/barpe/Downloads/New folder/DB2019_Project_Ass4_DDL.sql

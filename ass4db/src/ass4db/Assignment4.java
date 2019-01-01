@@ -22,9 +22,9 @@ public class Assignment4 {
 
 
 	//for the regular workflow of the program besides the init method
-	private static String JDBC_CONNECTION_URL="jdbc:sqlserver://localhost;username=LAPTOP-Q6DKH3TT/SQLEXPRESS;databaseName=DB2019_Ass2;integratedSecurity=true;";
+	private static String JDBC_CONNECTION_URL="jdbc:sqlserver://localhost;instance=SQLEXPRESS;databaseName=DB2019_Ass2;integratedSecurity=true;";
 	//for the init db method
-	private static String JDBC_CONNECTION_URL_INIT="jdbc:sqlserver://localhost;username=LAPTOP-Q6DKH3TT/SQLEXPRESS;integratedSecurity=true;";
+	private static String JDBC_CONNECTION_URL_INIT="jdbc:sqlserver://localhost;instance=SQLEXPRESS;integratedSecurity=true;";
 
 
 	private Assignment4() {
@@ -355,8 +355,7 @@ public class Assignment4 {
 	 */
 	private void dropDB() {
 		Connection con=getConWithMaster();
-		String DBNameToDrop="temp";						//change to DB2019_Ass2 before submitting
-		//String DBNameToDrop="DB2019_Ass2";
+		String DBNameToDrop="DB2019_Ass2";		//db name to drop
 		String sqlString="DROP DATABASE "+DBNameToDrop;
 		try {
 			Statement st=con.createStatement();
@@ -379,8 +378,6 @@ public class Assignment4 {
 	 * @param csvPath -the path for the .sql file with dll commands
 	 */
 	private void initDB(String csvPath) {
-
-
 		String readQuery="";
 		Connection con=getConWithMaster();	//get the connection with DB
 		try {
@@ -593,19 +590,27 @@ public class Assignment4 {
 
 		Connection con=getCon();	//get the connection with DB
 		try {
-			Statement st =con.createStatement();
-
-			//insert a row to the Employee table
-			try {
-				//results get the feedback from query
-				int results=st.executeUpdate("INSERT INTO Employee (EID,LastName,FirstName,BirthDate,StreetName,Number,door,City) VALUES('"+EID+"','"+LastName+"','"+FirstName+"','"+BirthDate+"','"+StreetName+"','"+Number+"','"+door+"','"+City+"')");
+			con.setAutoCommit(false);
+			//insert a row to the Employee table with the received params
+			String insertString="INSERT INTO Employee (EID,LastName,FirstName,BirthDate,StreetName,Number,door,City) VALUES(?,?,?,?,?,?,?,?)";
+			PreparedStatement pst=con.prepareStatement(insertString);
+			pst.setInt(1, EID);	
+			pst.setString(2, LastName);	
+			pst.setString(3, FirstName);	
+			pst.setDate(4, BirthDate);	
+			pst.setString(5, StreetName);	
+			pst.setInt(6, Number);	
+			pst.setInt(7, door);	
+			pst.setString(8, City);	
+			pst.addBatch();
+			pst.executeBatch();
+			con.commit();
+				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}catch(SQLException ex){
-			ex.printStackTrace();
-		}
+		
 
 		//close connection
 		if(con!=null){
