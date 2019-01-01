@@ -1,6 +1,3 @@
-loadNeighborhoodsFromCsv,C:/Users/barpe/Desktop/data/neighborhoods.csv
-initDB,C:/Users/barpe/Downloads/New folder/DB2019_Project_Ass4_DDL.sql
-updateEmployeeSalaries,100
 getEmployeeTotalSalary
 updateAllProjectsBudget,100
 getTotalProjectBudget
@@ -8,4 +5,7 @@ calculateIncomeFromParking,2000
 getMostProfitableParkingAreas
 getNumberOfParkingByArea
 getNumberOfDistinctCarsByArea
-AddEmployee,400,bardugoiiirrrr,bariirrrr,1929-12-10,narkisairrr,7,7,jerusalemr
+AddEmployee,450,bardumanrr,barlllrrr,1923-12-10,narkipkr,8,8,jer8
+loadNeighborhoodsFromCsv,C:/Users/barpe/Desktop/data/neighborhoods.csv
+initDB,C:/Users/barpe/Downloads/New folder/DB2019_Project_Ass4_DDL.sql
+updateEmployeeSalaries,100
